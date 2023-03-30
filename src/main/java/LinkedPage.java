@@ -1,9 +1,12 @@
+import com.opencsv.CSVWriter;
 import org.htmlunit.WebClient;
 import org.htmlunit.html.HtmlPage;
 import org.htmlunit.html.HtmlSpan;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -29,8 +32,6 @@ public class LinkedPage {
         String listelement = null;
         JSONObject jsonObject = new JSONObject();    //
         JSONArray jsonArray= new JSONArray();
-        // that should be the big Jsonobject
-        //  jsonObject.put("position",nested);
 
 
         for (int i = 0; i < arrayList.size(); i++) {
@@ -55,19 +56,33 @@ public class LinkedPage {
                 JSONObject mapJson= new JSONObject(nestesMap);
                 jsonArray.put(mapJson);
 
-                jsonObject.put("Job_Postions",jsonArray);
+                jsonObject.put("JobPostions",jsonArray);
 
                 //  System.out.println(" Das sind Anforderungen : " + "\n" + content.toString());
             }
 
         }
         String prettyJson = jsonObject.toString(3);
-        // writeToCSVFile(prettyJson);
         System.out.println(prettyJson);
-
+        writeToCSVFile(jsonObject);
 
     }
-    public void writeToCSVFile(String filname){
+    public void writeToCSVFile(JSONObject jsonObject){
+        String[] header = {"Title", "Skills", "Url"};
+        if (jsonObject!=null){
+            try (CSVWriter writer = new CSVWriter(new FileWriter("Stesptone_Listings.csv"))) {
+                writer.writeNext(header);
+                JSONArray results = jsonObject.getJSONArray("JobPostions");
+                for (int i = 0; i < results.length(); i++) {
+                    JSONObject result = results.getJSONObject(i);
+                    String[] line = {result.getString("Title"), result.getString("Skills"), result.getString("URL")};
+                    writer.writeNext(line);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
 
