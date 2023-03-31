@@ -29,7 +29,6 @@ public class Webscraping {
      * @return Document to pass it to the crawl method
      */
     public static Document request(String url, ArrayList<String> v) throws IOException {
-        String filename = "StepstoneWebsracping.txt";
         Document document = null;
         try {
             Connection con = Jsoup.connect(url);
@@ -57,7 +56,6 @@ public class Webscraping {
                 jsonObject1.put("position", jsonArray);
                 jsonObject2.put("Software entwicklung", jsonObject1);
 
-                //   fileWriter.write(jsonObject1.toString());
             } catch (JSONException e) {
             }
             System.out.println(jsonObject1);
@@ -96,14 +94,7 @@ public class Webscraping {
         }
 
         String classname = "sc-fzqBZW dkGKpH";                              // Element for the job description
-        Elements jobPosition = document.getElementsByClass(classname);                                              // thats the link where the joposting is
-
-        JSONObject jsonObject1 = new JSONObject();
-        String jobpostion;
-
-        for (Element e : jobPosition) {
-            jobpostion = e.text();                                                                               // inhalt von dem element in das jsonarray
-        }                                                                                               // links werden hier gespeichert
+        Elements jobPosition = document.getElementsByClass(classname);                                              // thats the link where the joposting is                                                                                            // links werden hier gespeichert
 
         String classnameLink = "sc-fzokOt hTheZK";                                      // Element for the link
         String cleanUrl = "";
@@ -119,7 +110,6 @@ public class Webscraping {
             System.out.println(" Das ist die Arraylist mit den joblistings" + list);
 
             linkedPage.exctractInformation(list);
-
 
         }
     }
