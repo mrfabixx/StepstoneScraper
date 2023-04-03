@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 
 public class LinkedPage {
@@ -36,7 +37,6 @@ public class LinkedPage {
 
             for (int i = 0; i < arrayList.size(); i++) {
                 if (arrayList.get(i) != null) {
-                    JSONObject nested = new JSONObject();
 
                     LinkedHashMap<String, Object> nestesMap = new LinkedHashMap<>();
 
@@ -44,14 +44,32 @@ public class LinkedPage {
                     page = webClient.getPage(listelement);
                     HtmlSpan jobPostion = page.getFirstByXPath("(//span[@class='listing-content-provider-1idv5t9'])[1]");
                     String jobDescription = jobPostion.asNormalizedText();
+                    HtmlSpan rolle = page.getFirstByXPath("(//span[@class='listing-content-provider-pz58b2'])[2]");
+                    String jobRolle = rolle.asNormalizedText();
                     String currentUrl = String.valueOf(page.getEnclosingWindow().getEnclosedPage().getUrl());
                     System.out.println(currentUrl);
 
                     HtmlSpan span = page.getFirstByXPath("(//span[@class='listing-content-provider-pz58b2'])[3]");
-                    String skills = span.asNormalizedText();
+                    String content = span.asNormalizedText();
+                    String[] lines = content.split("\\n");
+                    String newContent = String.join("\n", lines);
 
-                    nestesMap.put("Title", jobDescription);
-                    nestesMap.put("Skills", skills);
+//                    String[] array = content.split("\\n");
+//                    String newLines = Arrays.toString(array);
+//                    System.out.println(newLines);
+//
+//                    StringBuilder stringBuilder = new StringBuilder();
+//                    for(int x=0;x< newLines.length();x++){
+//                         stringBuilder.append(x);
+//                         stringBuilder.append("\n");
+//
+//                    }
+
+
+//                    }
+                    nestesMap.put("Jobtitle", jobDescription);
+                    nestesMap.put("Job Description", jobRolle);
+                    nestesMap.put("Skills", newContent);
                     nestesMap.put("URL", currentUrl);
                     JSONObject mapJson = new JSONObject(nestesMap);
                     jsonArray.put(mapJson);
@@ -75,14 +93,14 @@ public class LinkedPage {
 
     public String writeToCSVFile(JSONObject jsonObject) {
         String filename = "Stepstone_Listings.csv";
-        String[] header = {"Title", "Skills", "Url"};
+        String[] header = {"Title","Description", "Skills", "Url"};
         if (jsonObject != null) {
             try (CSVWriter writer = new CSVWriter(new FileWriter(filename))) {
                 writer.writeNext(header);
                 JSONArray array = jsonObject.getJSONArray("JobPostions");
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject result = array.getJSONObject(i);
-                    String[] line = {result.getString("Title"), result.getString("Skills"), result.getString("URL")};
+                    String[] line = {result.getString("Jobtitle"),result.getString("Job Description"), result.getString("Skills"), result.getString("URL")};
                     writer.writeNext(line);
                 }
             } catch (IOException e) {
