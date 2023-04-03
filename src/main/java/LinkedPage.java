@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import java.io.*;
 import java.util.ArrayList;
+
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 
@@ -30,7 +31,7 @@ public class LinkedPage {
             webClient.getOptions().setCssEnabled(false);
             webClient.getOptions().setJavaScriptEnabled(false);
 
-            String listelement = null;
+            String listelement;
             JSONObject jsonObject = new JSONObject();    //
             JSONArray jsonArray = new JSONArray();
 
@@ -88,7 +89,7 @@ public class LinkedPage {
 
     /**
      * takes the Jsonobject and writes to a CSV File
-     * @param jsonObject
+     * @param jsonObject is the object wich is passed
      */
 
     public String writeToCSVFile(JSONObject jsonObject) {
@@ -120,12 +121,13 @@ public class LinkedPage {
         try {
             CSVReader reader = new CSVReader(new FileReader(filename));
             String[] nextLine;
-            while ((nextLine = reader.readNext()) != null) {                                    // reads the nextlines and stores them into nextilne array if not null
-                for (int i=0; i<=nextLine.length;i++) {
-                    System.out.print( i + " ");
-                }
-                System.out.println();
-            }
+            while ((nextLine = reader.readNext()) != null) {
+                String lines = Arrays.toString(nextLine);
+                System.out.println(lines);// reads the nextlines and stores them into nextilne array if not null
+//                for (int i=0; i<=nextLine.length;i++) {
+//                    System.out.print( i + " ");
+//                }
+              }
             reader.close();
         } catch (IOException | CsvValidationException e) {
             System.err.println(e.getMessage());

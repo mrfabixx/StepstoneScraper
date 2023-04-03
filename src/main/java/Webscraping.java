@@ -18,7 +18,7 @@ public class Webscraping {
         SeleniumDrive selenium = new SeleniumDrive();
         String url = selenium.login();
 
-        crawlListings(1, url, new ArrayList<String>());
+        crawlListings(1, url, new ArrayList<>());
 
     }
 
