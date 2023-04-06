@@ -5,19 +5,29 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import java.io.IOException;
+import java.util.NoSuchElementException;
+import java.util.Properties;
+import java.util.Scanner;
+
 public class SeleniumDrive {
 
 
     WebDriver webDriver;
+    private Properties properties;
 
-
-    public String login() throws InterruptedException {
+    public String login() throws InterruptedException, IOException {
 
         String url = "https://www.stepstone.de";
         String path = "C://Users//fhoti//StepstoneWebsracping//chromedriver.exe";
-        String wordToSearch = "Adesso Se";                                                  // Das Unternehmen das gesucht werden soll
-        String mail = "fabien.hoti.yahoo@icloud.com";                                       // Login Daten von Stepstone Account
-        String stepstonePassword = "Toietmoi2016!!!";
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter the Name of the Company you want to search");
+
+        String company = scanner.nextLine();
+
+        String mail = System.getenv("Stepstone.mail");                          // Envirement Varibles
+        String stepstonePassword = System.getenv("Stepstone.password");
 
         System.setProperty("webdriver.chrome.driver", path);
 
@@ -49,14 +59,26 @@ public class SeleniumDrive {
 
         email.sendKeys(mail);
         password.sendKeys(stepstonePassword);
+        Thread.sleep(300);
         WebElement login_button = webDriver.findElement(By.cssSelector("button[type='submit']"));
         login_button.click();
-        Thread.sleep(2500);
+//        try {
+//            WebElement login_failed_window = webDriver.findElement(By.className("alert alert-danger at-login-alert"));
+//            if (login_failed_window.isDisplayed()){
+//                login_failed_window.click();
+//            }else {
+//
+//            }
+//        }catch ( NoSuchElementException e){
+//
+//        }
+
+        Thread.sleep(2000);
 
         /**
          *  the Company to Search
          */
-        String uppercase = wordToSearch.toUpperCase();
+        String uppercase = company.toUpperCase();
         WebElement search_key = webDriver.findElement(By.xpath("(//input[@id='stepstone-autocomplete-34'])[1]"));
         search_key.sendKeys(uppercase);
         Thread.sleep(2000);
@@ -72,9 +94,15 @@ public class SeleniumDrive {
         findJob_button.click();
 
         Thread.sleep(1000);
-        WebElement exit_window_suche = webDriver.findElement(By.cssSelector("button[class='close at-japubox-popover__modal-close'] span[title='Schließen']"));
-        exit_window_suche.click();
-        String current_url = webDriver.getCurrentUrl();
+      //  String current_url = null;
+      //  try{
+//            WebElement exit_window_suche = webDriver.findElement(By.cssSelector("button[class='close at-japubox-popover__modal-close'] span[title='Schließen']"));
+//            exit_window_suche.click();
+//
+//        }catch (NoSuchElementException e){
+//             current_url = webDriver.getCurrentUrl();
+//        }
+     String current_url = webDriver.getCurrentUrl();
 
         return current_url;
     }

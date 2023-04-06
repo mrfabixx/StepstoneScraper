@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 public class LinkedPage {
 
@@ -23,7 +24,7 @@ public class LinkedPage {
 
     }
 
-    public void exctractInformation(ArrayList<String> arrayList) throws IOException {
+    public void extractInformation(ArrayList<String> arrayList) throws IOException {
 
         if (arrayList != null) {
             webClient = new WebClient();
@@ -32,14 +33,14 @@ public class LinkedPage {
             webClient.getOptions().setJavaScriptEnabled(false);
 
             String listelement;
-            JSONObject jsonObject = new JSONObject();    //
+            JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
 
 
             for (int i = 0; i < arrayList.size(); i++) {
                 if (arrayList.get(i) != null) {
 
-                    LinkedHashMap<String, Object> nestesMap = new LinkedHashMap<>();
+                    LinkedHashMap<String, Object> nestedMap = new LinkedHashMap<>();
 
                     listelement = arrayList.get(i);
                     page = webClient.getPage(listelement);
@@ -48,40 +49,29 @@ public class LinkedPage {
                     HtmlSpan rolle = page.getFirstByXPath("(//span[@class='listing-content-provider-pz58b2'])[2]");
                     String jobRolle = rolle.asNormalizedText();
                     String currentUrl = String.valueOf(page.getEnclosingWindow().getEnclosedPage().getUrl());
-                    System.out.println(currentUrl);
+                   // System.out.println(currentUrl);
 
                     HtmlSpan span = page.getFirstByXPath("(//span[@class='listing-content-provider-pz58b2'])[3]");
                     String content = span.asNormalizedText();
                     String[] lines = content.split("\\n");
                     String newContent = String.join("\n", lines);
 
-//                    String[] array = content.split("\\n");
-//                    String newLines = Arrays.toString(array);
-//                    System.out.println(newLines);
-//
-//                    StringBuilder stringBuilder = new StringBuilder();
-//                    for(int x=0;x< newLines.length();x++){
-//                         stringBuilder.append(x);
-//                         stringBuilder.append("\n");
-//
-//                    }
 
-
-//                    }
-                    nestesMap.put("Jobtitle", jobDescription);
-                    nestesMap.put("Job Description", jobRolle);
-                    nestesMap.put("Skills", newContent);
-                    nestesMap.put("URL", currentUrl);
-                    JSONObject mapJson = new JSONObject(nestesMap);
+                    nestedMap.put("Jobtitle", jobDescription);
+                    nestedMap.put("Job Description", jobRolle);
+                    nestedMap.put("Skills", newContent);
+                    nestedMap.put("URL", currentUrl);
+                    JSONObject mapJson = new JSONObject(nestedMap);
                     jsonArray.put(mapJson);
 
                     jsonObject.put("JobPostions", jsonArray);
-                    }
+                }
             }
             String prettyJson = jsonObject.toString(3);
             System.out.println(prettyJson);
             String filename = writeToCSVFile(jsonObject);
-            readCsvFile(filename);
+
+             readCsvFile(filename);
         }
 
 
@@ -89,49 +79,58 @@ public class LinkedPage {
 
     /**
      * takes the Jsonobject and writes to a CSV File
+     *
      * @param jsonObject is the object wich is passed
      */
 
     public String writeToCSVFile(JSONObject jsonObject) {
-        String filename = "Stepstone_Listings.csv";
-        String[] header = {"Title","Description", "Skills", "Url"};
+        String filePath = "C://Users//fhoti//Desktop//StepstoneScraper";
+        File file = new File(filePath);
+        String newFilename ;
+
+        newFilename = "Stepstone_Listings.csv";
+        String[] header = {"Title", "Description", "Skills", "Url"};
         if (jsonObject != null) {
-            try (CSVWriter writer = new CSVWriter(new FileWriter(filename))) {
+            try (CSVWriter writer = new CSVWriter(new FileWriter(newFilename))) {
                 writer.writeNext(header);
                 JSONArray array = jsonObject.getJSONArray("JobPostions");
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject result = array.getJSONObject(i);
-                    String[] line = {result.getString("Jobtitle"),result.getString("Job Description"), result.getString("Skills"), result.getString("URL")};
+                    String[] line = {result.getString("Jobtitle"), result.getString("Job Description"), result.getString("Skills"), result.getString("URL")};
                     writer.writeNext(line);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } return filename;
+        }
 
+
+        return newFilename;
     }
 
     /**
      * takes the file and checks if the file has already double joblistings
+     *
      * @param filename
      * @throws FileNotFoundException
      */
     public void readCsvFile(String filename) throws FileNotFoundException {
-
+        List<String> existingFile = new ArrayList<>();
         try {
             CSVReader reader = new CSVReader(new FileReader(filename));
             String[] nextLine;
             while ((nextLine = reader.readNext()) != null) {
                 String lines = Arrays.toString(nextLine);
-                System.out.println(lines);// reads the nextlines and stores them into nextilne array if not null
-//                for (int i=0; i<=nextLine.length;i++) {
-//                    System.out.print( i + " ");
-//                }
-              }
+                existingFile.add(lines);
+                System.out.println(existingFile);
+                // reads the nextlines and stores them into nextilne array if not null
+
+            }
             reader.close();
         } catch (IOException | CsvValidationException e) {
             System.err.println(e.getMessage());
-        }    }
+        }
+    }
 
 }
 

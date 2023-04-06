@@ -46,8 +46,6 @@ public class Webscraping {
             JSONObject jsonObject1 = new JSONObject();
             JSONArray jsonArray = new JSONArray();
 
-            //  FileWriter fileWriter = new FileWriter(filename);
-
             for (Element e : jobPosition) {
                 jsonArray.put(e.text());                                                                                // inhalt von dem element in das jsonarray
             }
@@ -66,19 +64,6 @@ public class Webscraping {
         return document;
 
     }
-//                for (int i =0; i<=list.size();i++){
-//
-//                }
-//                jsonObject.put("Position",stringbuilder);
-//                fileWriter.append(jsonObject.toString());
-//
-//                System.out.println(jsonObject);
-//            System.out.println(fileWriter);
-//
-//            //System.out.println(document);
-//        } catch (IOException e) {
-//            throw new IOException();
-
 
     public static void crawlListings(int level, String url, ArrayList<String> visited) throws IOException, InterruptedException {
         Connection con = Jsoup.connect(url);
@@ -109,47 +94,12 @@ public class Webscraping {
             }
             System.out.println(" Das ist die Arraylist mit den joblistings" + list);
 
-            linkedPage.exctractInformation(list);
+            linkedPage.extractInformation(list);
 
         }
     }
 
-    public static void crawl(int level, String url, ArrayList<String> visited) throws IOException, InterruptedException {
-        Document doc = null;
-        Connection linkedConnection;
-        Document linkedDocument = null;
 
-        if (level <= 2) {
-            doc = request(url, visited);
-        }
-        ArrayList<String> list = new ArrayList<>();                                                 // links werden hier gespeichert
-
-        String classname = "sc-fzokOt hTheZK";
-        String cleanUrl = "";
-
-        if (doc != null) {
-            for (Element link : doc.getElementsByClass(classname)) {
-
-                cleanUrl = link.attr("abs:href");                                                             // all the links that are from the job postings
-                System.out.println(cleanUrl);
-                list.add(cleanUrl);
-                Thread.sleep(100);
-            }
-            //String clean_url = link.absUrl("href");
-            //  System.out.println(cleanUrl);
-//                System.out.println(requiredSkillset);
-
-//                if (!visited.contains(cleanUrl)) {                                                                        // if the link is already in the list and visited we contoninue to crawl
-//
-//                    crawl(level++, cleanUrl, visited);                                                                    // next link
-//                }
-        }
-        System.out.println(" Das ist die Arraylist mit den joblistings" + list);
-
-        LinkedPage linkedPage = new LinkedPage();
-        //linkedPage.exctractInformation(list);
-
-    }
 
 }
 
