@@ -1,6 +1,8 @@
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.FileUtils;
 import org.htmlunit.WebClient;
 import org.htmlunit.html.HtmlPage;
 import org.htmlunit.html.HtmlSpan;
@@ -69,6 +71,11 @@ public class LinkedPage {
             }
             String prettyJson = jsonObject.toString(3);
             System.out.println(prettyJson);
+            try (FileWriter jsonfile = new FileWriter("data.json"))  {
+                jsonfile.write(prettyJson);
+            }catch (IOException e){
+                e.printStackTrace();
+            }
             String filename = writeToCSVFile(jsonObject);
 
              readCsvFile(filename);
@@ -83,27 +90,49 @@ public class LinkedPage {
      * @param jsonObject is the object wich is passed
      */
 
-    public String writeToCSVFile(JSONObject jsonObject) {
+    public String writeToCSVFile(JSONObject jsonObject) throws IOException {
         String filePath = "C://Users//fhoti//Desktop//StepstoneScraper";
         File file = new File(filePath);
         String newFilename ;
+        String content = "";
 
         newFilename = "Stepstone_Listings.csv";
         String[] header = {"Title", "Description", "Skills", "Url"};
         if (jsonObject != null) {
+
             try (CSVWriter writer = new CSVWriter(new FileWriter(newFilename))) {
                 writer.writeNext(header);
                 JSONArray array = jsonObject.getJSONArray("JobPostions");
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject result = array.getJSONObject(i);
                     String[] line = {result.getString("Jobtitle"), result.getString("Job Description"), result.getString("Skills"), result.getString("URL")};
+
+                    content +=String.join(",", line)+ ("\n");
                     writer.writeNext(line);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
+//        String newContentHash = DigestUtils.md5Hex(content);    // read the Hash
+//        File outputFile = new File(newFilename);
+//        if (outputFile.exists()){
+//            try {
+//                String oldcontent = FileUtils.readFileToString(outputFile,"UTF-8");
+//                String oldcontentHash = DigestUtils.md5Hex(oldcontent);
+//                if (!oldcontentHash.equals(newContentHash)){
+//                    return newFilename;
+//                }
+//            }catch (IOException e){
+//                e.printStackTrace();
+//            }
+//        }
+//        try (CSVWriter writer = new CSVWriter(new FileWriter(outputFile))) {
+//            writer.writeNext(header);
+//            writer.writeAll((Iterable<String[]>) Arrays.asList((content.split("\n"))));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         return newFilename;
     }

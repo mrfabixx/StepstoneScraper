@@ -59,7 +59,7 @@ public class SeleniumDrive {
 
         email.sendKeys(mail);
         password.sendKeys(stepstonePassword);
-        Thread.sleep(300);
+        Thread.sleep(1000);
         WebElement login_button = webDriver.findElement(By.cssSelector("button[type='submit']"));
         login_button.click();
 //        try {
