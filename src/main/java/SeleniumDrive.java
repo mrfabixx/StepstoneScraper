@@ -22,9 +22,6 @@ public class SeleniumDrive {
         String url = "https://www.stepstone.de";
         String path = "C://Users//fhoti//Desktop//StepstoneScraper//chromedriver.exe";
 
-//        Scanner scanner = new Scanner(System.in);
-//        System.out.println("Enter the Name of the Company you want to search");
-
         String company = System.getenv("Search.company");
 
         String mail = System.getenv("Stepstone.mail");                          // Envirement Varibles
@@ -45,47 +42,51 @@ public class SeleniumDrive {
         Thread.sleep(2000);
         WebElement accept_cookies = webDriver.findElement(By.id("ccmgt_explicit_accept"));
         accept_cookies.click();
-//        String uppercase = company.toUpperCase();
-//        WebElement search = webDriver.findElement(By.xpath("(//input[@id='stepstone-autocomplete-162'])[1]"));
-//        search.sendKeys(uppercase);
-//        search.sendKeys(Keys.RETURN);
-
-        WebElement searchbox = webDriver.findElement(By.id("stepstone-menubar-38-5"));
-        searchbox.click();
-        WebElement login_menu = webDriver.findElement(By.className("hf-provider-1yjlzju"));
-        login_menu.click();
+        Thread.sleep(2000);
+        String uppercase = company.toUpperCase();
+        WebElement search = webDriver.findElement(By.xpath("(//input[@id='stepstone-autocomplete-162'])[1]"));
+        search.sendKeys(uppercase);
         Thread.sleep(1000);
+        WebElement dropmenu = webDriver.findElement(By.cssSelector("li[id='stepstone-autocomplete-162-item-0'] span[class='sbr-cojtx3']"));
+        dropmenu.click();
+        search.sendKeys(Keys.RETURN);
+
+//        WebElement searchbox = webDriver.findElement(By.id("stepstone-menubar-38-5"));
+//        searchbox.click();
+//        WebElement login_menu = webDriver.findElement(By.className("hf-provider-1yjlzju"));
+//        login_menu.click();
+//        Thread.sleep(1000);
 
 
         /**
          * Login into Stepstone Account
          */
-        WebElement email = webDriver.findElement(By.name("email"));
-        WebElement password = webDriver.findElement(By.name("password"));
-
-        email.sendKeys(mail);
-        password.sendKeys(stepstonePassword);
-        Thread.sleep(2000);
-        WebElement login_button = webDriver.findElement(By.cssSelector("button[type='submit']"));
-        login_button.click();
+//        WebElement email = webDriver.findElement(By.name("email"));
+//        WebElement password = webDriver.findElement(By.name("password"));
+//
+//        email.sendKeys(mail);
+//        password.sendKeys(stepstonePassword);
+//        Thread.sleep(2000);
+//        WebElement login_button = webDriver.findElement(By.cssSelector("button[type='submit']"));
+//        login_button.click();
 
         /**
          *  the Company to Search
          */
-        String uppercase = company.toUpperCase();
-        WebElement search_key = webDriver.findElement(By.xpath("(//input[@id='stepstone-autocomplete-162'])[1]"));
-        search_key.sendKeys(uppercase+" ");
-        Thread.sleep(2500);
+//        String uppercase = company.toUpperCase();
+//        WebElement search_key = webDriver.findElement(By.xpath("(//input[@id='stepstone-autocomplete-162'])[1]"));
+//        search_key.sendKeys(uppercase+" ");
+//        Thread.sleep(2500);
 
 
         /**
          * dropmenu auswählen sont wird nichts ausgeführt
          */
-        WebElement dropmenu = webDriver.findElement(By.xpath("(//span[@class='sbr-cojtx3'])[1]"));
-        dropmenu.click();
-       // search_key.sendKeys(Keys.RETURN);
-        WebElement findJob_button = webDriver.findElement(By.cssSelector("button[aria-label='Jobs finden'] span[class='sbr-1jx3vjx']"));
-        findJob_button.click();
+//        WebElement dropmenu = webDriver.findElement(By.xpath("(//span[@class='sbr-cojtx3'])[1]"));
+//        dropmenu.click();
+//       // search_key.sendKeys(Keys.RETURN);
+//        WebElement findJob_button = webDriver.findElement(By.cssSelector("button[aria-label='Jobs finden'] span[class='sbr-1jx3vjx']"));
+//        findJob_button.click();
 
         Thread.sleep(1000);
         //  String current_url = null;
