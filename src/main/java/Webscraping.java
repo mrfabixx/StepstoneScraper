@@ -91,7 +91,7 @@ public class Webscraping {
         ArrayList<String> nextpage = new ArrayList<>();
         ArrayList<String> list = new ArrayList<>();
 
-        LinkedPage linkedPage = new LinkedPage();
+      //  LinkedPage linkedPage = new LinkedPage();
 
         String nextpageLink;
         Document doc=null;
@@ -117,7 +117,7 @@ public class Webscraping {
 
 
         System.out.println("Das ist die ArrayList mit den Joblistings: " + list);
-        linkedPage.extractInformation( list);
+       // linkedPage.extractInformation( list);
     }
 
     }
