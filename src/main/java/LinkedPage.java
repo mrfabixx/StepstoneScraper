@@ -38,6 +38,7 @@ public class LinkedPage {
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
 
+
 //            for (int i = 0; i < nextpage.size(); i++) {
 //                nextPage = nextpage.get(i);
 //                linkedpage = webClient.getPage(nextPage);
